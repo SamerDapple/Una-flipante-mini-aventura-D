@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>una flipante mini-aventura :D</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Arial', sans-serif; }
+    canvas { display: block; background: radial-gradient(#1e1e2f, #0d0d17); }
+    #startScreen {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: #000000c0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: white; z-index: 10;
+    }
+    #startScreen h1 { font-size: 2em; margin-bottom: 20px; }
+    #startScreen button {
+      padding: 10px 20px; font-size: 1em;
+      background-color: #ff69b4; color: white;
+      border: none; border-radius: 10px;
+      cursor: pointer;
+    }
+    #startScreen button:hover { background-color: #ff1493; }
+  </style>
+</head>
+<body>
+  <div id="startScreen">
+    <h1>una flipante mini-aventura :D</h1>
+    <button onclick="startGame()">Play</button>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let gameStarted = false;
+
+    function startGame() {
+      document.getElementById('startScreen').style.display = 'none';
+      gameStarted = true;
+      // Aquí inicia el nivel tutorial
+      startTutorial();
+    }
+
+    // Fondo animado de estrellas y corazones
+    const elements = [];
+    for (let i = 0; i < 100; i++) {
+      elements.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 1,
+        speed: Math.random() * 0.5 + 0.2,
+        type: Math.random() > 0.5 ? '⭐' : '💖'
+      });
+    }
+
+    function drawBackground() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      elements.forEach(el => {
+        ctx.font = `${el.size * 10}px Arial`;
+        ctx.fillText(el.type, el.x, el.y);
+        el.y += el.speed;
+        if (el.y > canvas.height) {
+          el.y = 0;
+          el.x = Math.random() * canvas.width;
+        }
+      });
+    }
+
+    function startTutorial() {
+      // Aquí colocaríamos la lógica de movimiento y ejemplo de ítems
+      alert('Tutorial: Usa WASD para moverte y recoge los ítems 💫');
+      // En la versión final se reemplaza por el sistema real de juego
+    }
+
+    function gameLoop() {
+      if (gameStarted) {
+        drawBackground();
+        // Lógica del juego...
+      }
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>
